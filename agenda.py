@@ -81,6 +81,84 @@ def procurar_contato(agenda):
             print(f"- {contato['nome']}: {contato['telefone']}")
     else:
         print("Nenhum contato encontrado!")
+
+def editar_contato(agenda):
+    encontrados = [] #Definir lista de contatos encontrados
+
+    # pedir o nome ou o telefone que deseja editar
+    palavra_chave = input("Digite o nome do contato que deseja editar: ")
+
+    # procurar por nome
+    for contato in agenda:
+        if contato["nome"] == palavra_chave:
+            encontrados.append(agenda.index(contato))
+
+    if (len(encontrados) > 1):
+        print("Foi encontrado mais de um contato!")
+        for index in range(len(encontrados)):
+            print(f"{index}: {agenda[encontrados[index]]['nome']} - {agenda[encontrados[index]]['telefone']}")
+
+        id = int(input("Digite o numero correspondente a id do contato que deseja editar: "))
+        if id < 0 and id >= len(encontrados):
+            print("Id inválida, tente novamente!")
+            return
+        else:
+            id = encontrados[id]
+
+    elif (len(encontrados) == 1):
+        id = encontrados[0]
+
+    else:
+        print("Nenhum contato encontrato!")
+        return
+
+    nome = input(f"Digite o novo nome para {agenda[id]['nome']}:")
+    if len(nome) > 0:
+        agenda[id]['nome'] = nome
+
+    
+    telefone = input(f"Digite o novo telefone para {agenda[id]['nome']}:")
+    if len(telefone) > 0:
+        agenda[id]['telefone'] = telefone
+
+    salvar_agenda(agenda)
+    print("Contato alterado com sucesso!")
+
+def excluir_contato(agenda):
+    encontrados = [] #Definir lista de contatos encontrados
+
+    # pedir o nome ou o telefone que deseja editar
+    palavra_chave = input("Digite o nome do contato que deseja excluir: ")
+
+    # procurar por nome
+    for contato in agenda:
+        if contato["nome"] == palavra_chave:
+            encontrados.append(agenda.index(contato))
+
+    if (len(encontrados) > 1):
+        print("Foi encontrado mais de um contato!")
+        for index in range(len(encontrados)):
+            print(f"{index}: {agenda[encontrados[index]]['nome']} - {agenda[encontrados[index]]['telefone']}")
+
+        id = int(input("Digite o numero correspondente a id do contato que deseja excluir: "))
+        if id < 0 and id >= len(encontrados):
+            print("Id inválida, tente novamente!")
+            return
+        else:
+            id = encontrados[id]
+
+    elif (len(encontrados) == 1):
+        id = encontrados[0]
+
+    else:
+        print("Nenhum contato encontrato!")
+        return
+
+    confirm = input(f"Tem certeza que deseja excluir {agenda[id]['nome']} da lista de contatos (s/n)?: ")
+    if confirm == "s" or confirm == "S":
+        agenda.pop(id)
+        salvar_agenda(agenda)
+        print("Contato excluido com sucesso!")
         
 def main():
     print("-- Bem vindo a agenda 2.0 --")
@@ -93,10 +171,27 @@ def main():
 
         if op == 1:
             adicionar_contato(agenda)
+
         elif op == 2:
             listar_contatos(agenda)
+
         elif op == 3:
             procurar_contato(agenda)
+
+        elif op == 4:
+            editar_contato(agenda)
+
+        elif op == 5:
+            excluir_contato(agenda)
+
+        elif op == 6:
+            confirm = input(f"Tem certeza que deseja excluir a lista de contatos (s/n)?: ")
+            if confirm == "s" or confirm == "S":
+                agenda.clear()
+                salvar_agenda(agenda)
+                print("Agenda excluida com sucesso!")
+        elif op == 7:
+            print(f"A agenda tem {len(agenda)} contatos cadastrados!\n")
         elif op == 8:
             break
         else:
